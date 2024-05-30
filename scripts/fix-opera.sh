@@ -47,8 +47,8 @@ fi
 #Getting download links
 printf 'Getting download links...\n'
 ##ffmpeg
-readonly FFMPEG_URL_MAIN=$(wget -q4O - $FFMPEG_SRC_MAIN | grep browser_download_url | cut -d '"' -f 4 | grep linux-x64 | head -n 1)
-readonly FFMPEG_URL_ALT=$(wget -q4O - $FFMPEG_SRC_ALT | grep browser_download_url | cut -d '"' -f 4 | grep linux-x64 | head -n 1)
+readonly FFMPEG_URL_MAIN=$(wget -q4O - $FFMPEG_SRC_MAIN | jq | grep browser_download_url | cut -d '"' -f 4 | grep linux-x64 | head -n 1)
+readonly FFMPEG_URL_ALT=$(wget -q4O - $FFMPEG_SRC_ALT | jq | grep browser_download_url | cut -d '"' -f 4 | grep linux-x64 | head -n 1)
 [[ $(basename $FFMPEG_URL_ALT) < $(basename $FFMPEG_URL_MAIN) ]] && readonly FFMPEG_URL=$FFMPEG_URL_MAIN || readonly FFMPEG_URL=$FFMPEG_URL_ALT
 if [[ -z $FFMPEG_URL ]]; then
   printf 'Failed to get ffmpeg download URL. Exiting...\n'
@@ -65,14 +65,14 @@ fi
 printf 'Downloading files...\n'
 mkdir -p "$TEMP_DIR/opera-fix"
 ##ffmpeg
-wget -q4 --show-progress $FFMPEG_URL -O "$TEMP_DIR/opera-fix/ffmpeg.zip"
+wget -q4 --progress=bar:force:noscroll $FFMPEG_URL -O "$TEMP_DIR/opera-fix/ffmpeg.zip"
 if [ $? -ne 0 ]; then
   printf 'Failed to download ffmpeg. Check your internet connection or try later\n'
   exit 1
 fi
 ##Widevine
 if $FIX_WIDEVINE;  then
-  wget -q4 --show-progress "$WIDEVINE_URL" -O "$TEMP_DIR/opera-fix/widevine.zip"
+  wget -q4 --progress=bar:force:noscroll "$WIDEVINE_URL" -O "$TEMP_DIR/opera-fix/widevine.zip"
   if [ $? -ne 0 ]; then
     printf 'Failed to download Widevine CDM. Check your internet connection or try later\n'
     exit 1
