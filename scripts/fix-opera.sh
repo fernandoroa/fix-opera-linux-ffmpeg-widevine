@@ -20,7 +20,7 @@ if ! which wget > /dev/null; then
 	exit 1
 fi
 
-if which pacman > /dev/null; then
+if which pacman &> /dev/null; then
 	ARCH_SYSTEM=true
 fi
 
