@@ -15,8 +15,13 @@ if ! which unzip > /dev/null; then
 	exit 1
 fi
 
-if ! which wget > /dev/null; then
-	printf '\033[1mwget\033[0m package must be installed to run this script\n'
+if ! which curl > /dev/null; then
+	printf '\033[1mcurl\033[0m package must be installed to run this script\n'
+	exit 1
+fi
+
+if ! which jq > /dev/null; then
+	printf '\033[1mjq\033[0m package must be installed to run this script\n'
 	exit 1
 fi
 
@@ -47,8 +52,8 @@ fi
 #Getting download links
 printf 'Getting download links...\n'
 ##ffmpeg
-readonly FFMPEG_URL_MAIN=$(wget -q4O - $FFMPEG_SRC_MAIN | jq -r '.[0].assets[0].browser_download_url')
-readonly FFMPEG_URL_ALT=$(wget -q4O - $FFMPEG_SRC_ALT | jq -r '.[0].assets[0].browser_download_url')
+readonly FFMPEG_URL_MAIN=$(curl -sL4 $FFMPEG_SRC_MAIN | jq -r '.[0].assets[0].browser_download_url')
+readonly FFMPEG_URL_ALT=$(curl -sL4 $FFMPEG_SRC_ALT | jq -r '.[0].assets[0].browser_download_url')
 [[ $(basename $FFMPEG_URL_ALT) < $(basename $FFMPEG_URL_MAIN) ]] && readonly FFMPEG_URL=$FFMPEG_URL_MAIN || readonly FFMPEG_URL=$FFMPEG_URL_ALT
 if [[ -z $FFMPEG_URL ]]; then
   printf 'Failed to get ffmpeg download URL. Exiting...\n'
@@ -57,7 +62,7 @@ fi
 
 ##Widevine
 if $FIX_WIDEVINE; then
-  readonly WIDEVINE_LATEST=`wget -q4O - $WIDEVINE_VERSIONS | tail -n1`
+  readonly WIDEVINE_LATEST=`curl -sL4 $WIDEVINE_VERSIONS | tail -n1`
   readonly WIDEVINE_URL="https://dl.google.com/widevine-cdm/$WIDEVINE_LATEST-linux-x64.zip"
 fi
 
@@ -65,14 +70,14 @@ fi
 printf 'Downloading files...\n'
 mkdir -p "$TEMP_DIR/opera-fix"
 ##ffmpeg
-wget -q4 --progress=bar:force:noscroll $FFMPEG_URL -O "$TEMP_DIR/opera-fix/ffmpeg.zip"
+curl -L4 --progress-bar $FFMPEG_URL -o "$TEMP_DIR/opera-fix/ffmpeg.zip"
 if [ $? -ne 0 ]; then
   printf 'Failed to download ffmpeg. Check your internet connection or try later\n'
   exit 1
 fi
 ##Widevine
 if $FIX_WIDEVINE;  then
-  wget -q4 --progress=bar:force:noscroll "$WIDEVINE_URL" -O "$TEMP_DIR/opera-fix/widevine.zip"
+  curl -L4 --progress-bar "$WIDEVINE_URL" -o "$TEMP_DIR/opera-fix/widevine.zip"
   if [ $? -ne 0 ]; then
     printf 'Failed to download Widevine CDM. Check your internet connection or try later\n'
     exit 1
