@@ -14,13 +14,15 @@
 
    **git** (Is needed for fetching this script)
 
-	For Debian-based systems: `sudo apt install wget unzip git`
+   **jq** (Is needed for parsing JSON from github)
 
-	For Arch-based systems: `sudo pacman -S wget unzip git`
+	For Debian-based systems: `sudo apt install wget unzip git jq`
 
-	For RedHat-based systems: `sudo dnf install wget unzip git`
+	For Arch-based systems: `sudo pacman -S wget unzip git jq`
+
+	For RedHat-based systems: `sudo dnf install wget unzip git jq`
 	
-2. (*Optional*) **python3-dnf-plugin-post-transaction-actions** (Is needed for autoupdate in RedHat-based systems)
+3. (*Optional*) **python3-dnf-plugin-post-transaction-actions** (Is needed for autoupdate in RedHat-based systems)
 	`dnf install python3-dnf-plugin-post-transaction-actions`
 
 ## Usage
