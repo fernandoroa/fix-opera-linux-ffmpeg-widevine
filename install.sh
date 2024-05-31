@@ -19,6 +19,11 @@ if ! which wget > /dev/null; then
 	exit 1
 fi
 
+if ! which jq > /dev/null; then
+	printf '\033[1mjq\033[0m package must be installed to run this script\n'
+	exit 1
+fi
+
 readonly SCRIPT_PATH=$(dirname $(readlink -f $0))
 readonly INSTALL_PATH="/root/.scripts"
 readonly USER_NAME="$(logname)"
