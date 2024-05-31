@@ -47,8 +47,8 @@ fi
 #Getting download links
 printf 'Getting download links...\n'
 ##ffmpeg
-readonly FFMPEG_URL_MAIN=$(wget -q4O - $FFMPEG_SRC_MAIN | jq | grep browser_download_url | cut -d '"' -f 4 | grep linux-x64 | head -n 1)
-readonly FFMPEG_URL_ALT=$(wget -q4O - $FFMPEG_SRC_ALT | jq | grep browser_download_url | cut -d '"' -f 4 | grep linux-x64 | head -n 1)
+readonly FFMPEG_URL_MAIN=$(wget -q4O - $FFMPEG_SRC_MAIN | jq -r '.[0].assets[0].browser_download_url')
+readonly FFMPEG_URL_ALT=$(wget -q4O - $FFMPEG_SRC_ALT | jq -r '.[0].assets[0].browser_download_url')
 [[ $(basename $FFMPEG_URL_ALT) < $(basename $FFMPEG_URL_MAIN) ]] && readonly FFMPEG_URL=$FFMPEG_URL_MAIN || readonly FFMPEG_URL=$FFMPEG_URL_ALT
 if [[ -z $FFMPEG_URL ]]; then
   printf 'Failed to get ffmpeg download URL. Exiting...\n'
