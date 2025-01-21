@@ -1,2 +1,2 @@
 DPkg::Pre-Invoke {"stat -c %Z $(readlink -f $(which opera)) > /tmp/opera.timestamp  2> /dev/null || echo 0 > /tmp/opera.timestamp";};
-DPkg::Post-Invoke {"set NEW_OPERA=`stat -c %Z $(readlink -f $(which opera))` || exit 0; set OLD_OPERA=`cat /tmp/opera.timestamp` || exit 0; if [ $NEW_OPERA -ne $OLD_OPERA ]; then /root/.scripts/fix-opera.sh; fi; rm -f /tmp/opera.timestamp";};
+DPkg::Post-Invoke {"set NEW_OPERA=`stat -c %Z $(readlink -f $(which opera))` || exit 0; set OLD_OPERA=`cat /tmp/opera.timestamp` || exit 0; if [ "$NEW_OPERA" != "$OLD_OPERA" ]; then /root/.scripts/fix-opera.sh; fi; rm -f /tmp/opera.timestamp";};
