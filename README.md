@@ -29,7 +29,7 @@
 
 1. Clone this repo
 
-    `git clone https://github.com/Ld-Hagen/fix-opera-linux-ffmpeg-widevine.git`
+    `git clone https://github.com/fernandoroa/fix-opera-linux-ffmpeg-widevine.git`
 
 2. Go to the repo root folder
 
